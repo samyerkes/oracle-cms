@@ -4,13 +4,17 @@ Create or replace PROCEDURE add_user(un in varchar, fname in varchar, lname in v
   stmt_str VARCHAR(500);
   pwd varchar(200) := 'changeMe';
 BEGIN
+  /* find the role_id of the new role specified for user */
   Open c1;
   Loop
     fetch c1 into roleid;
     exit when c1%notfound;
   End loop;
+  /* construct a new insert statement for the new user */
   stmt_str := 'INSERT INTO users (user_id, user_name, user_password, user_fname, user_lname, user_last_login, role_id) VALUES (users_sequence.nextval, :un, :pwd, :fname, :lname, CURRENT_TIMESTAMP, :roleid)';
+  /* execute the insert statement using the declared input parameters */
   EXECUTE IMMEDIATE stmt_str USING un, pwd, fname, lname, roleid;
+  /* output confirmation to the user */
   dbms_output.put_line(fname || ' ' || lname || ' (' || un || ') has been imported into the CMS as a ' || newrole);
   dbms_output.put_line('Please have ' || fname || ' log into the CMS and change the default password');
 EXCEPTION
