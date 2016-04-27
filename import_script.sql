@@ -558,24 +558,3 @@ INSERT INTO settings_general VALUES (21, TO_TIMESTAMP('04/07/2016 03:32:24', 'MM
 INSERT INTO settings_general VALUES (22, TO_TIMESTAMP('04/10/2016 05:29:23', 'MM/DD/YYYY HH24:MI:SS')); 
 INSERT INTO settings_general VALUES (23, TO_TIMESTAMP('04/04/2016 22:15:18', 'MM/DD/YYYY HH24:MI:SS')); 
 INSERT INTO settings_general VALUES (24, TO_TIMESTAMP('03/01/2016 13:44:23', 'MM/DD/YYYY HH24:MI:SS')); 
-
-/* Import in triggers */
-CREATE OR REPLACE TRIGGER content_timestamp
-BEFORE UPDATE ON contents
-for each row
-BEGIN
-  /* Use the new keyword to update the time with the system timestamp */
-  :new.CONTENT_UPDATED_TIME := SYSTIMESTAMP;
-  /* Output a confirmation so the user knows the timestamp has automatically be updated */
-  dbms_output.put_line('Content_updated_time for content id #' || :old.content_id || ' has been updated to: ' || :new.content_updated_time);
-end;
-
-CREATE OR REPLACE TRIGGER page_timestamp
-BEFORE UPDATE ON pages
-for each row
-BEGIN
-  /* Use the new keyword to update the time with the system timestamp */
-  :new.PAGE_LAST_REVISED := SYSTIMESTAMP;
-  /* Output a confirmation so the user knows the timestamp has automatically be updated */
-  dbms_output.put_line('Page_last_revised for page id #' || :old.page_id || ' has been updated to: ' || :new.page_last_revised);
-end;
